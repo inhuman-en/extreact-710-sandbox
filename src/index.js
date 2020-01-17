@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import App from './App';
 //import { render } from '@sencha/ext-react';
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('main')
-);
+window.onload = function () {
+    ReactDOM.render(
+        <App />,
+        document.getElementById('main')
+    );
+}

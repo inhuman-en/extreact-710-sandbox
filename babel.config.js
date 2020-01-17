@@ -1,60 +1,16 @@
 module.exports = function (api) {
   api.cache(true);
   return {
-    "presets": [
+    presets: [
       [
-        "@babel/preset-env",
+        '@babel/preset-env',
         {
-          "modules": false
-        }
+          useBuiltIns: 'entry',
+          corejs: '2',
+          modules: false,
+        },
       ],
-      "@babel/preset-react"
+      '@babel/preset-react',
     ],
-    "plugins": [
-      "react-hot-loader/babel",
-      // "@sencha/ext-react-babel-plugin",
-      "@babel/plugin-transform-runtime",
-      "@babel/plugin-syntax-dynamic-import",
-      "@babel/plugin-syntax-import-meta",
-      "@babel/plugin-proposal-class-properties",
-      "@babel/plugin-proposal-json-strings",
-      [
-        "@babel/plugin-proposal-decorators",
-        {
-          "legacy": true
-        }
-      ],
-      "@babel/plugin-proposal-function-sent",
-      "@babel/plugin-proposal-export-namespace-from",
-      "@babel/plugin-proposal-numeric-separator",
-      "@babel/plugin-proposal-throw-expressions"
-    ],
-    "ignore": [
-      "build"
-    ],
-    "env": {
-      "test": {
-        "presets": [
-          "@babel/preset-env",
-          "@babel/preset-react"
-        ],
-        "plugins": [
-          "@babel/plugin-syntax-dynamic-import",
-          "@babel/plugin-syntax-import-meta",
-          "@babel/plugin-proposal-class-properties",
-          "@babel/plugin-proposal-json-strings",
-          [
-            "@babel/plugin-proposal-decorators",
-            {
-              "legacy": true
-            }
-          ],
-          "@babel/plugin-proposal-function-sent",
-          "@babel/plugin-proposal-export-namespace-from",
-          "@babel/plugin-proposal-numeric-separator",
-          "@babel/plugin-proposal-throw-expressions"
-        ]
-      }
-    }
   };
-}
+};

@@ -26,6 +26,7 @@ module.exports = function (env) {
         profile: buildprofile, 
         environment: buildenvironment,
         verbose: buildverbose,
+        theme: 'theme-triton'
       })
     ]
     if (!isProd) {
