@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Container, Grid, Column, Toolbar, Button } from "@sencha/ext-react-modern";
+import { Container, Grid, Column, Toolbar, Button, PivotGrid } from "@sencha/ext-react-modern";
 import data from './mockdata';
 
 Ext.require("Ext.grid.plugin.Summary");
 Ext.require("Ext.grid.plugin.RowExpander");
 Ext.require("Ext.data.summary.*");
 Ext.require("Ext.grid.filters.*");
+Ext.require("Ext.pivot.*");
 
 const renderLink = (value, record) => {
   const jsx = <a style={{ color: 'red' }} href={`mailto:${record.get('email')}`}>{value}</a>;
@@ -117,6 +118,51 @@ const virtualGridColumns = [
   }
 ];
 
+const grouperFn = function (rec) {
+  return `${rec.get('name')} -  ${rec.get('email')}`;
+};
+const jsxGrouperFn = function (rec) {
+  return <strong>{rec.get('name')} {rec.get('email')}</strong>;
+};
+
+const labelRenderer= v => v + ' group';
+const jsxLabelRenderer= v => <strong>{v}</strong>;
+     
+const pivotMatrix = {
+  type: 'local',
+  collapsibleRows: true,
+  collapsibleColumns: false,
+  rowGrandTotalsPosition: 'first',
+  textGrandTotalTpl: 'Total',
+  viewLayoutType: 'outline',     
+  leftAxis: [{
+    header: 'First',
+    dataIndex: 'email',
+    width: 200,
+    grouperFn: jsxGrouperFn,
+    // labelRenderer: jsxLabelRenderer
+  },
+  {
+    header: 'Second',
+    dataIndex: 'name',
+    width: 200,
+  }],
+  aggregate: [{
+    header: 'Count',
+    dataIndex: 'num',
+    aggregator: 'count'
+  },
+  {
+    header: 'Sum',
+    dataIndex: 'num',
+    aggregator: 'sum'
+  }],
+  store: {
+    proxy: { type: 'memory' },
+    data
+  },
+};
+
 class App extends Component {
   constructor() {
     super();
@@ -129,13 +175,6 @@ class App extends Component {
     this.changeStyle = this.changeStyle.bind(this);
     this.destroyGrid = this.destroyGrid.bind(this);
   }
-  
-  // onReady = (event) => {
-  //   event.cmpObj['grid1'].setStore(createStore());
-  //   // event.detail.cmpObj['grid2'].setStore(createStore());
-  //   // event.detail.cmpObj['grid3'].setStore(createStore());
-  //   // event.detail.cmpObj['grid4'].setStore(createStore());
-  // };
 
   changeState() {
     this.setState({
@@ -156,9 +195,7 @@ class App extends Component {
   }
 
   rowTpl (record) {
-    console.log('row tpl');
-
-    return <div style={{ height: '100px', background: 'lightblue' }}>{record.get('email')}</div>
+    return <div style={{ height: '20px', background: 'lightblue' }}>{record.email}</div>
   }
 
   toggleRow (grid, target) {
@@ -170,7 +207,6 @@ class App extends Component {
 
     return (
       <div>
-        <div style={{height: 100, textAlign: "center" }} >Chart area</div>
       <Container
         layout="vbox"
         shadow
@@ -182,7 +218,13 @@ class App extends Component {
           <Button text="Change Style" handler={this.changeStyle}/>
           <Button text="Destroy Grid" handler={this.destroyGrid}/>
         </Toolbar>
+          <PivotGrid
+            title="Pivot Grid"
+            matrix={pivotMatrix}
+            height={300}
+          />
           {this.state.showGrid && <Grid
+            title="Grid"
             height={300}
             weighted
             extname="grid1"

@@ -26,7 +26,8 @@ module.exports = function (env) {
         profile: buildprofile, 
         environment: buildenvironment,
         verbose: buildverbose,
-        theme: 'theme-triton'
+        theme: 'theme-triton',
+        packages: ['pivot'],
       })
     ]
     if (!isProd) {
