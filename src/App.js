@@ -195,11 +195,14 @@ class App extends Component {
   }
 
   rowTpl (record) {
+    console.log('rowTpl');
     return <div style={{ height: '20px', background: 'lightblue' }}>{record.email}</div>
   }
 
   toggleRow (grid, target) {
     console.log('row toggled');
+
+    target.record.set('email', 'changed');
   }
 
   render() {
@@ -254,7 +257,9 @@ class App extends Component {
                 tpl: this.rowTpl,
               },
             }}
-            onChildTap={this.toggleRow}
+            listeners={{
+              childtap: this.toggleRow
+            }}
             variableHeights
           />}
           <Grid
@@ -287,12 +292,6 @@ class App extends Component {
             columns={virtualGridColumns}
             infinite
             plugins={{
-              gridsummary: {
-                row: {
-                  docked: 'top',
-                  weight: 1,
-                },
-              },
               rowexpander: {
                 column: {
                   width: 35,
@@ -304,7 +303,9 @@ class App extends Component {
                 tpl: this.rowTpl,
               },
             }}
-            onChildTap={this.toggleRow}
+            listeners={{
+              childtap: this.toggleRow
+            }}
             variableHeights
           />
       </Container>
