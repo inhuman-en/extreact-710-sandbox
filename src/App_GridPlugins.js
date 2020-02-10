@@ -59,8 +59,8 @@ class App extends Component {
               docked: 'top',
               weight: 1,
             },
-            // function config
-            // testFn: this.testPluginFn
+            // breaking function config
+            testFn: this.testPluginFn
           },
           gridfilters: true,
         }}
