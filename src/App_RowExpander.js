@@ -23,53 +23,79 @@ const gridColumns = [
   }
 ];
 
+class RowComponent extends Component {
+  constructor(props) {
+    super(props);
+    console.log('component created for', props.id);
+  }
+
+  render() {
+    return <div style={{ height: '20px', background: 'lightblue' }}>{this.props.email}</div>;
+  }
+}
+
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: null,
+    };
+
+    this.itemConfig = {
+      body: {
+        tpl: this.rowTpl.bind(this),
+      },
+    };
+
+    this.gridListeners = {
+      childtap: this.toggleRow.bind(this),
+    };
+
+    this.store = Ext.create('Ext.data.Store', {
+      proxy: { type: 'memory' },
+      data
+    });
+  }
 
   rowTpl (record) {
     console.log('rowTpl');
-    return <div style={{ height: '20px', background: 'lightblue' }}>{record.email}</div>;
+
+    if (!record.toggled) return null;
+
+    return <RowComponent id={record.id} email={record.email} />;
   }
 
   toggleRow (grid, target) {
     console.log('row toggled');
 
-    target.record.set('email', 'changed');
+    target.record.set('toggled', true);
   }
 
   render() {
     return (
       <Grid
-        ref={grid => {
-          this.grid = grid;
-        }}
-        title="Grid with Row Expander"
-        height={350}
-        weighted
-        extname="grid1"
-        store={{
-          xtype: 'store',
-          proxy: { type: 'memory' },
-          data
-        }}
-        columns={gridColumns}
-        infinite={false}
-        plugins={{
-          rowexpander: {
-            column: {
-              width: 35,
-            },
+      ref={grid => {
+        this.grid = grid;
+      }}
+      refreshHeightOnUpdate={false}
+      title="Grid with Row Expander"
+      height={350}
+      weighted
+      extname="grid1"
+      store={this.store}
+      columns={gridColumns}
+      infinite={false}
+      plugins={{
+        rowexpander: {
+          column: {
+            width: 35,
           },
-        }}
-        itemConfig={{
-          body: {
-            tpl: this.rowTpl,
-          },
-        }}
-        // listeners={{
-        //   childtap: this.toggleRow
-        // }}
-        variableHeights
-      />
+        },
+      }}
+      itemConfig={this.itemConfig}
+      listeners={this.gridListeners}
+    />
     )
   }
 }
