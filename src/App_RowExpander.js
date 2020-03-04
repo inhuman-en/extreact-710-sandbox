@@ -1,27 +1,8 @@
 import React, { Component } from 'react';
-import { Grid } from "@sencha/ext-react-modern";
+import { Grid, Button, Container } from "@sencha/ext-react-modern";
 import data from './mockdata';
 
 Ext.require("Ext.grid.plugin.RowExpander");
-Ext.require("Ext.grid.filters.*");
-
-const gridColumns = [
-  {
-    text: "Name",
-    dataIndex: "name",
-    width: 150,
-  },
-  {
-    text: 'Number',
-    dataIndex: "num",
-    width: 200,
-  },
-  {
-    text: "Email",
-    dataIndex: "email",
-    width: 200,
-  }
-];
 
 class RowComponent extends Component {
   constructor(props) {
@@ -42,6 +23,8 @@ class App extends Component {
       value: null,
     };
 
+    this.btnHandler = this.btnHandler.bind(this);
+
     this.itemConfig = {
       body: {
         tpl: this.rowTpl.bind(this),
@@ -56,6 +39,24 @@ class App extends Component {
       proxy: { type: 'memory' },
       data
     });
+
+    this.gridColumns = [
+      {
+        text: "Name",
+        dataIndex: "name",
+        width: 150,
+      },
+      {
+        text: 'Number',
+        dataIndex: "num",
+        width: 200,
+      },
+      {
+        text: "Email",
+        dataIndex: "email",
+        width: 200,
+      }
+    ];
   }
 
   rowTpl (record) {
@@ -72,30 +73,34 @@ class App extends Component {
     target.record.set('toggled', true);
   }
 
+  btnHandler () {
+    this.setState(() => ({ value: 'random' }));
+  }
+
   render() {
     return (
-      <Grid
-      ref={grid => {
-        this.grid = grid;
-      }}
-      refreshHeightOnUpdate={false}
-      title="Grid with Row Expander"
-      height={350}
-      weighted
-      extname="grid1"
-      store={this.store}
-      columns={gridColumns}
-      infinite={false}
-      plugins={{
-        rowexpander: {
-          column: {
-            width: 35,
+      <Container layout="vbox">
+        <Button text="Update State (cause rerender)" handler={this.btnHandler} />
+        <Grid
+        ref={grid => {
+          this.grid = grid;
+        }}
+        title="Grid with Row Expander"
+        height={350}
+        store={this.store}
+        columns={this.gridColumns}
+        infinite={false}
+        plugins={{
+          rowexpander: {
+            column: {
+              width: 35,
+            },
           },
-        },
-      }}
-      itemConfig={this.itemConfig}
-      listeners={this.gridListeners}
-    />
+        }}
+        itemConfig={this.itemConfig}
+        listeners={this.gridListeners}
+      />
+      </Container>
     )
   }
 }
