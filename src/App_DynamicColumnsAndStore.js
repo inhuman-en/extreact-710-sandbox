@@ -29,6 +29,8 @@ const firstColumns = [
     dataIndex: "email",
     key: "email",
     width: 200,
+    cell: { xtype: 'reactcell',  encodeHtml: false, },
+    renderer: v => <strong>{v}</strong>,
   }
 ];
 
@@ -38,7 +40,8 @@ const secondColumns = [
     dataIndex: "num",
     key: "second-num",
     width: 300,
-    renderer: v => `${v} Number`
+    cell: { xtype: 'reactcell',  encodeHtml: false, },
+    renderer: v => <em>{v}</em>,
   },
   {
     text: "Another email",
@@ -46,7 +49,7 @@ const secondColumns = [
     key: "second-email",
     width: 300,
     cell: { xtype: 'reactcell',  encodeHtml: false, },
-    renderer: v => <strong>{v}</strong>,
+    renderer: v => <em>{v}</em>,
   },
 ];
 

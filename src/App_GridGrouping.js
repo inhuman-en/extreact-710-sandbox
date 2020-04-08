@@ -12,7 +12,10 @@ const gridColumns = [
     dataIndex: "name",
     key: "name",
     width: 150,
-    summaryRenderer: v => 'Total'
+    cell: { encodeHtml: false, xtype: 'reactcell' },
+    renderer: v => <strong>{v}</strong>,
+    // groupHeaderTpl: v => <strong>{v.name}</strong>
+    // summaryRenderer: v => <strong>Total</strong>
   },
   {
     text: 'Number',
@@ -20,7 +23,7 @@ const gridColumns = [
     key: "num",
     width: 200,
     summary: 'sum',
-    summaryRenderer: v => `$${v}`
+    // summaryRenderer: v => `$${v}`
   },
   {
     text: "Email",
@@ -28,14 +31,12 @@ const gridColumns = [
     key: "email",
     width: 200,
     summary: 'count',
-    summaryRenderer: v => `Count - ${v}`
+    // groupHeaderTpl: v => <em>{v.name}</em>,
+    // summaryRenderer: v => `Count - ${v}`
   }
 ];
 
 class App extends Component {
-
-  testPluginFn () {}
-
   render() {
     return (
       <Grid
@@ -43,27 +44,25 @@ class App extends Component {
           this.grid = grid;
         }}
         title="Grid with plugins"
-        height={350}
+        height={500}
         weighted
         extname="grid1"
         store={{
             xtype: 'store',
             proxy: { type: 'memory' },
-            data
+            data: data.slice(0,10)
         }}
         columns={gridColumns}
         infinite={false}
-        plugins={{
-          gridsummary: {
-            row: {
-              docked: 'top',
-              weight: 1,
-            },
-            // breaking function config
-            testFn: this.testPluginFn
-          },
-          gridfilters: true,
-        }}
+        // plugins={{
+        //   gridsummary: {
+        //     row: {
+        //       docked: 'top',
+        //       weight: 1,
+        //     },
+        //   },
+        //   gridfilters: true,
+        // }}
       />
     )
   }
